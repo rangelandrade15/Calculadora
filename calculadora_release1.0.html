@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Calculadora</title>
+	<style type="text/css">
+		body{
+	    position: absolute;
+		width: 80%;
+		height: 90%;
+		margin-left: 10%;	
+		}
+		#calculadora{
+			border: 1px solid rgb(124, 173, 169);
+			background-color: rgb(249, 252,253);
+			width: 95%;
+			height: 90%;
+			padding: 10px;
+			border-radius: 10px;
+			margin: 5px;
+		}
+		button{
+			width: 20%;
+			height: 100px;
+			margin: 3px;
+			border-radius: 5px;
+			border-style: none;
+			font-size: 50pt;
+		}
+		#igualdade{
+			position: absolute;
+			width: 13%;
+			top: 18.5%;
+			left: 80.5%;
+			height: 73%;
+			background-color: rgb(44, 83, 134);
+		}
+		#display{
+			width: 94%;
+			height: 10%;
+			font-size: 50pt;
+			overflow: hidden;
+			border-radius: 5px;
+			padding: 20px;
+		}
+		#limpatela{
+			background-color: rgb(189, 111, 105);
+		}
+	</style>
+	<script type="text/javascript">
+	   var displayBuffer = "";
+	   var numero = "";
+	   var termos = [undefined,undefined,undefined];
+	   var resultado = undefined;
+
+
+	   function calcular() {
+	   	raiz = Math.sqrt(document.getElementById('display').value);  
+	   	showdisplayRaiz(raiz);
+	   }
+
+
+	   function pressNum(num){
+	   	numero = numero.concat(num.innerHTML);
+	   	showdisplay(num.innerHTML);
+	   }
+
+	   function pressOperator(op){
+	   	if (termos[1]==undefined) {
+	   	termos[0] = numero;
+	   	termos[1] = op.innerHTML;
+	   	showdisplay(op.innerHTML);
+	   	numero = "";	
+	   }
+	   }
+
+	   function pressEqual(){
+	   	if (termos[0] != undefined && termos[1] !=undefined && numero != ""){
+	   		termos[2] = numero;
+	   	var keepresultado;
+	   	switch(termos[1]){
+	   		case '+':
+	   		resultado = Number(termos[0])+Number(termos[2]);
+	   		break;
+	   		case '-':
+	   		resultado = Number(termos[0])-Number(termos[2]);
+	   		break;
+	   		case '*':
+	   		resultado = Number(termos[0])*Number(termos[2]);
+	   		break;
+	   		case '/':
+	   		resultado = Number(termos[0])/Number(termos[2]);
+	   		// porcetagem -> o primeiro número separado pelo operador % vai representar a porcentagem do segundo. 
+	   		case '%':
+	   		resultado = (Number(termos[0])/100)*Number(termos[2]);
+	   		break;
+	   	}
+	    keepresultado = resultado;
+	   	clearDisplay();
+	   	showdisplay(resultado);
+	   	clearMerory();
+	   	numero = keepresultado.toString();
+	   	}
+	   	}	   
+	   function clearMerory(){
+	   	numero = "";
+	   	termos = [undefined,undefined,undefined];
+	   	resultado = undefined;
+	   }
+	   function clearDisplay(){
+	   	displayBuffer = "";
+	   	var tela = document.getElementById('display');
+	   	tela.value = displayBuffer;
+	   }
+	   function clearAII(){
+	   	clearDisplay();
+	   	clearMerory();
+	   }
+
+	   // apagar os números individualmente.
+	   function clearOne(){
+	   	var tela = document.getElementById('display');
+	   	var s = tela.value.replace(tela.value.slice(-1), "");
+	   	tela.value = s;
+	   	clearMerory();
+	   }
+
+	   function showdisplay(conteudo){
+	   	displayBuffer = displayBuffer.concat(conteudo);
+	   	var tela = document.getElementById('display');
+	   	tela.value = displayBuffer;
+	   }
+
+	   // função para limpar e imprimir o valor da raiz.
+	   function showdisplayRaiz(conteudo){
+	   	clearDisplay();
+	   	var tela = document.getElementById('display');
+	   	tela.value = conteudo;
+	   }
+
+	</script>
+</head>
+<body>
+	
+	<div id="calculadora">
+		<textarea id="display" disabled rows="1"></textarea>
+	<div>
+		<button onclick="pressOperator(this)">%</button>
+		<button id="limpatela" onclick="clearAII()">CE</button>
+		<button id="calc" onclick="calcular()">√</button>
+		<button >+/-</button>
+		
+	</div>
+	<div>
+		<button onclick="pressNum(this)">1</button>
+		<button onclick="pressNum(this)">2</button>
+		<button onclick="pressNum(this)">3</button>
+		<button onclick="pressOperator(this)">+</button>
+		
+	</div>
+	<div>
+		<button onclick="pressNum(this)">4</button>
+		<button onclick="pressNum(this)">5</button>
+		<button onclick="pressNum(this)">6</button>
+		<button onclick="pressOperator(this)">-</button>
+		
+	</div>
+	<div>
+		<button onclick="pressNum(this)">7</button>
+		<button onclick="pressNum(this)">8</button>
+		<button onclick="pressNum(this)">9</button>
+		<button onclick="pressOperator(this)">*</button>
+		
+	</div>
+	<div>
+		<button onclick="pressNum(this)">0</button>
+		<button onclick="pressNum(this)">.</button>
+		<button id="limpatela" onclick="clearOne()"><</button>
+		<button onclick="pressOperator(this)">/</button>
+		
+	</div>
+	<button id="igualdade" onclick="pressEqual()">=</button>
+	</div>
+
+</body>
+</html>
